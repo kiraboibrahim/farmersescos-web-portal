@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "AgriEnergy",
+  "name": "AgriEnergy - IMEU",
+  "description": "Bridging the gap between farmers and Energy Service Companies",
   "icons": [
     {
       "src": "favicon.ico",

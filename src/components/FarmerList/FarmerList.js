@@ -4,20 +4,26 @@ import {
   Box,
   Card,
   CardContent,
-  IconButton,
-  Typography,
-  Link,
-  MenuButton,
   Dropdown,
-  MenuItem,
+  IconButton,
+  Link,
   Menu,
-  Grid,
+  MenuButton,
+  MenuItem,
+  Typography,
 } from "@mui/joy";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useGetFarmersQuery } from "../../services/farmer";
+import { useState } from "react";
+import Pagination from "../Pagination/Pagination";
+import Loading from "../common/utils/Loading";
+import GridList from "../common/layouts/GridList";
+import resolvePhotoSrc from "../../utils/resolve-photo-src";
+import Empty from "../common/utils/Empty";
+import Error from "../common/utils/Error";
 
 function FarmerItem({ farmer }) {
   return (
@@ -25,7 +31,7 @@ function FarmerItem({ farmer }) {
       <CardContent orientation="horizontal">
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar
-            src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${farmer.profilePhoto}`}
+            src={resolvePhotoSrc(farmer.profilePhoto)}
             sx={{ marginRight: 1 }}
           >
             {farmer.name}
@@ -78,10 +84,7 @@ function FarmerItem({ farmer }) {
         </Box>
       </CardContent>
       <AspectRatio>
-        <img
-          src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${farmer.coverPhoto}`}
-          alt={farmer.name}
-        />
+        <img src={resolvePhotoSrc(farmer.coverPhoto)} alt={farmer.name} />
       </AspectRatio>
       <Typography
         sx={{
@@ -98,24 +101,35 @@ function FarmerItem({ farmer }) {
 }
 
 export default function FarmerList() {
-  const { data: farmers, error, isLoading } = useGetFarmersQuery();
+  const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
+  const {
+    data: farmers,
+    error: farmersFetchError,
+    isFetching,
+  } = useGetFarmersQuery({ page, search: searchParams.get("search") });
 
-  return !!error ? (
-    <Typography>{error}</Typography>
-  ) : isLoading ? (
-    <Typography>Loading...</Typography>
-  ) : !!farmers ? (
-    <Grid container spacing={1}>
-      {farmers.data.map((farmer) => (
-        <Grid
-          key={farmer.id}
-          size={{ xs: 12, sm: 6, md: 3 }}
-          flexGrow={1}
-          flexBasis={250}
-        >
-          <FarmerItem farmer={farmer} />
-        </Grid>
-      ))}
-    </Grid>
-  ) : null;
+  if (isFetching) {
+    return <Loading />;
+  }
+  if (farmersFetchError) {
+    return <Error error={farmersFetchError} />;
+  }
+
+  if (farmers?.data) {
+    return (
+      <>
+        <GridList
+          items={farmers.data}
+          renderItem={(item) => <FarmerItem farmer={item} />}
+          renderEmpty={() => <Empty>No farmers found</Empty>}
+        />
+        <Pagination
+          pageCount={farmers.meta.totalPages}
+          currentPage={farmers.meta.currentPage}
+          onSelectPage={setPage}
+        ></Pagination>
+      </>
+    );
+  }
 }

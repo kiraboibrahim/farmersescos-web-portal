@@ -11,38 +11,48 @@ import {
   MenuButton,
   MenuItem,
   Typography,
-  Grid,
 } from "@mui/joy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import { Link as RouterLink } from "react-router-dom";
+import {
+  Link as RouterLink,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useGetProductsQuery } from "../../services/product";
+import Pagination from "../Pagination/Pagination";
+import { useState } from "react";
+import Loading from "../common/utils/Loading";
+import GridList from "../common/layouts/GridList";
+import { useGetEscoProductsQuery } from "../../services/esco";
+import Empty from "../common/utils/Empty";
+import Error from "../common/utils/Error";
+import resolvePhotoSrc from "../../utils/resolve-photo-src";
 
-function ProductItem({ product }) {
+export function ProductItem({ product }) {
   return (
     <Card size="sm">
       <CardContent orientation="horizontal">
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Avatar
-            src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${product.esco.profilePhoto}`}
-            sx={{ marginRight: 1 }}
-          >
-            {product.esco.name}
-          </Avatar>
-          <Typography
-            level="body-sm"
-            sx={{
-              textOverflow: "ellipsis",
-              width: 120,
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {product.esco.name}
-          </Typography>
-        </Box>
+        <Avatar
+          src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${product.esco.profilePhoto}`}
+          sx={{ marginRight: 1 }}
+        >
+          {product.esco.name}
+        </Avatar>
+        <Typography
+          level="body-sm"
+          sx={{
+            alignSelf: "center",
+            flexGrow: 2,
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {product.esco.name}
+        </Typography>
         <Box sx={{ marginLeft: "auto" }}>
           <Dropdown>
             <MenuButton slots={{ root: IconButton }}>
@@ -78,31 +88,22 @@ function ProductItem({ product }) {
         </Box>
       </CardContent>
       <AspectRatio>
-        <img
-          src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${product.coverPhoto}`}
-          alt={product.name}
-        />
+        <img src={resolvePhotoSrc(product.coverPhoto)} alt={product.name} />
       </AspectRatio>
-      <Typography
-        level="body-md"
+      <Link
         sx={{
+          display: "block",
           overflow: "hidden",
           textOverflow: "ellipsis",
           whiteSpace: "nowrap",
-          fontWeight: "bold",
         }}
+        component={RouterLink}
+        to={`/products/${product.id}`}
+        overlay
+        underline="none"
       >
-        <Link
-          component={RouterLink}
-          to={`/products/${product.id}`}
-          overlay
-          underline="none"
-          color="neutral"
-          level="title-lg"
-        >
-          {product.name}
-        </Link>
-      </Typography>
+        <Typography level="title-md">{product.name}</Typography>
+      </Link>
       <Typography
         level="body-xs"
         sx={{
@@ -117,24 +118,60 @@ function ProductItem({ product }) {
   );
 }
 
-export default function ProductList() {
-  const { data: products, error, isLoading } = useGetProductsQuery();
-  return !!error ? (
-    <Typography>{error}</Typography>
-  ) : isLoading ? (
-    <Typography>Loading...</Typography>
-  ) : !!products ? (
-    <Grid container spacing={1}>
-      {products.data.map((product) => (
-        <Grid
-          key={product.id}
-          size={{ xs: 12, sm: 6, md: 3 }}
-          flexGrow={1}
-          flexBasis={250}
-        >
-          <ProductItem product={product} />
-        </Grid>
-      ))}
-    </Grid>
-  ) : null;
+export function AllProductList() {
+  const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
+  const {
+    data: products,
+    error,
+    isFetching,
+  } = useGetProductsQuery({ page, search: searchParams.get("search") });
+  if (isFetching) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error error={error} />;
+  }
+  return <ProductList products={products} setPage={setPage} />;
+}
+
+export function EscoProductList() {
+  const { id: escoId } = useParams();
+  const [page, setPage] = useState(1);
+  const {
+    data: products,
+    error,
+    isFetching,
+  } = useGetEscoProductsQuery({ escoId, page });
+  if (isFetching) {
+    return <Loading />;
+  }
+  if (!!error) {
+    return <Error error={error} />;
+  }
+  return <ProductList products={products} onSelectPage={setPage} />;
+}
+
+export default function ProductList({
+  products,
+  onSelectPage = (page) => page,
+}) {
+  if (products?.data) {
+    return (
+      <>
+        <GridList
+          items={products.data}
+          renderItem={(item) => <ProductItem product={item} />}
+          renderEmpty={() => <Empty>No products found</Empty>}
+        />
+        {!!products.meta && (
+          <Pagination
+            pageCount={products.meta.totalPages}
+            currentPage={products.meta.currentPage}
+            onSelectPage={onSelectPage}
+          ></Pagination>
+        )}
+      </>
+    );
+  }
 }

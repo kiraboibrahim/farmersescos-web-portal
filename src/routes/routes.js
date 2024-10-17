@@ -1,19 +1,36 @@
 import FarmerList from "../components/FarmerList/FarmerList";
-import ProductList from "../components/ProductList/Product.List";
+import {
+  AllProductList,
+  EscoProductList,
+} from "../components/ProductList/Product.List";
 import EscoList from "../components/EscoList/EscoList";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Nav from "../components/Nav/Nav";
+import Main from "../components/Main/Main";
 import FarmerDetail from "../components/FarmerDetail/FarmerDetail";
 import EscoDetail from "../components/EscoDetail/EscoDetail";
 import InterestList from "../components/InterestList/InterestList";
 import FarmerProfile from "../components/FarmerProfile/FarmerProfile";
 import EscoProfile from "../components/EscoProfile/EscoProfile";
 import ProductDetail from "../components/ProductDetail/ProductDetail";
+import FarmerInstallationList, {
+  EscoInstallationList,
+} from "../components/InstallationList/InstallationList";
+import Login from "../components/Login/Login";
+import SuperAdminRequired from "../components/SuperAdminRequired/SuperAdminRequired";
+import {
+  EscoOfferList,
+  FarmerOfferList,
+} from "../components/OfferList/OfferList";
+import { FarmerRecommendationList } from "../components/FarmerRecommendationList/FarmerRecommendationList";
 
 const routes = [
   {
     path: "/",
-    element: <Nav />,
+    element: (
+      <SuperAdminRequired>
+        <Main />
+      </SuperAdminRequired>
+    ),
     children: [
       {
         index: true,
@@ -21,7 +38,7 @@ const routes = [
       },
       {
         path: "products",
-        element: <ProductList />,
+        element: <AllProductList />,
       },
       {
         path: "farmers",
@@ -43,6 +60,18 @@ const routes = [
             path: "profile",
             element: <FarmerProfile />,
           },
+          {
+            path: "installations",
+            element: <FarmerInstallationList />,
+          },
+          {
+            path: "offers",
+            element: <FarmerOfferList />,
+          },
+          {
+            path: "recommendations",
+            element: <FarmerRecommendationList />,
+          },
         ],
       },
       {
@@ -61,6 +90,18 @@ const routes = [
             path: "profile",
             element: <EscoProfile />,
           },
+          {
+            path: "products",
+            element: <EscoProductList />,
+          },
+          {
+            path: "installations",
+            element: <EscoInstallationList />,
+          },
+          {
+            path: "offers",
+            element: <EscoOfferList />,
+          },
         ],
       },
       {
@@ -73,7 +114,13 @@ const routes = [
     path: "/farmers/:id",
     element: <FarmerDetail />,
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ];
 
-const router = createBrowserRouter([...routes]);
+const router = createBrowserRouter([...routes], {
+  basename: "/farmersescos-web-portal/",
+});
 export default router;

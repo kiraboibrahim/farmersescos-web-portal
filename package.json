@@ -1,7 +1,8 @@
 {
-  "name": "farmers-and-escos-frontend",
+  "name": "farmersescos-web-portal",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://kiraboibrahim.github.io/farmersescos-web-portal",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
@@ -13,6 +14,11 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "formik": "^2.4.6",
+    "lodash.isempty": "^4.4.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.isobject": "^3.0.2",
+    "lodash.transform": "^4.6.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -20,9 +26,14 @@
     "react-router": "^6.26.1",
     "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "react-select": "^5.8.1",
+    "react-toastify": "^10.0.5",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.4.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "server": "json-server -p 8000 -h 0.0.0.0 src/db.json",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -49,6 +60,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^9.0.0",
+    "gh-pages": "^6.1.1",
     "json-server": "^1.0.0-beta.2"
   }
 }

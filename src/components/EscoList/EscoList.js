@@ -4,108 +4,121 @@ import {
   Box,
   Card,
   CardContent,
-  IconButton,
-  Typography,
-  MenuItem,
-  Menu,
   Dropdown,
-  MenuButton,
+  IconButton,
   Link,
-  Grid,
+  Menu,
+  MenuButton,
+  MenuItem,
+  Typography,
 } from "@mui/joy";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useGetEscosQuery } from "../../services/esco";
+import Pagination from "../Pagination/Pagination";
+import { useState } from "react";
+import Loading from "../common/utils/Loading";
+import Error from "../common/utils/Error";
+import GridList from "../common/layouts/GridList";
+import resolvePhotoSrc from "../../utils/resolve-photo-src";
+import Empty from "../common/utils/Empty";
 
 function EscoItem({ esco }) {
   return (
     <Card size="sm">
       <CardContent orientation="horizontal">
-        <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box>
           <Avatar
-            src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${esco.profilePhoto}`}
-            sx={{ marginRight: 1 }}
+            src={resolvePhotoSrc(esco.profilePhoto)}
+            sx={{ marginRight: 1, flexGrow: 1 }}
           >
             {esco.name}
           </Avatar>
-          <Typography
-            level="body-sm"
-            sx={{
-              width: 120,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              fontWeight: "bold",
-            }}
-          >
-            <Link
-              component={RouterLink}
-              to={`/escos/${esco.id}`}
-              overlay
-              underline="none"
-              color="neutral"
-            >
-              {esco.name}
-            </Link>
-          </Typography>
         </Box>
-        <Box sx={{ marginLeft: "auto" }}>
-          <Dropdown>
-            <MenuButton slots={{ root: IconButton }}>
-              <MoreVertIcon />
-            </MenuButton>
-            <Menu>
-              <MenuItem>
-                <Typography
-                  level="body-sm"
-                  startDecorator={<ModeEditOutlinedIcon />}
-                >
-                  Edit
-                </Typography>
-              </MenuItem>
-              <MenuItem>
-                <Typography
-                  level="body-sm"
-                  startDecorator={<DeleteOutlinedIcon />}
-                >
-                  Delete
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Dropdown>
-        </Box>
+        <Link
+          component={RouterLink}
+          to={`/escos/${esco.id}`}
+          overlay
+          underline="none"
+          color="neutral"
+          sx={{
+            display: "block",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            fontWeight: "bold",
+            alignSelf: "center",
+            marginRight: "auto",
+            maxWidth: 1,
+          }}
+          level="body-sm"
+        >
+          {esco.name}
+        </Link>
+        <Dropdown>
+          <MenuButton slots={{ root: IconButton }}>
+            <MoreVertIcon />
+          </MenuButton>
+          <Menu>
+            <MenuItem>
+              <Typography
+                level="body-sm"
+                startDecorator={<ModeEditOutlinedIcon />}
+              >
+                Edit
+              </Typography>
+            </MenuItem>
+            <MenuItem>
+              <Typography
+                level="body-sm"
+                startDecorator={<DeleteOutlinedIcon />}
+              >
+                Delete
+              </Typography>
+            </MenuItem>
+          </Menu>
+        </Dropdown>
       </CardContent>
       <AspectRatio>
-        <img
-          src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${esco.coverPhoto}`}
-          alt={esco.name}
-        />
+        <img src={resolvePhotoSrc(esco.coverPhoto)} alt={esco.name} />
       </AspectRatio>
     </Card>
   );
 }
 
 export default function EscoList() {
-  const { data: escos, error, isLoading } = useGetEscosQuery();
+  const [searchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
+  const {
+    data: escos,
+    error: escosFetchError,
+    isFetching: isEscosFetchPending,
+  } = useGetEscosQuery({ page, search: searchParams.get("search") });
 
-  return isLoading ? (
-    <Typography>Loading...</Typography>
-  ) : !!error ? (
-    <Typography>{error}</Typography>
-  ) : !!escos ? (
-    <Grid container spacing={1}>
-      {escos.data.map((esco) => (
-        <Grid
-          key={esco.id}
-          size={{ xs: 12, sm: 6, md: 3 }}
-          flexGrow={1}
-          flexBasis={250}
-        >
-          <EscoItem esco={esco} />
-        </Grid>
-      ))}
-    </Grid>
-  ) : null;
+  if (isEscosFetchPending) {
+    return <Loading />;
+  }
+
+  if (escosFetchError) {
+    return <Error error={escosFetchError} />;
+  }
+
+  if (escos?.data) {
+    return (
+      <>
+        <GridList
+          items={escos.data}
+          renderItem={(item) => <EscoItem esco={item} />}
+          renderEmpty={() => <Empty>No escos found</Empty>}
+        />
+        <Pagination
+          pageCount={escos.meta.totalPages}
+          currentPage={escos.meta.currentPage}
+          onSelectPage={setPage}
+        ></Pagination>
+      </>
+    );
+  }
 }
