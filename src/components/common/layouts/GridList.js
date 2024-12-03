@@ -5,7 +5,7 @@ export default function GridList({
   renderItem,
   renderEmpty = () => <Box>No items found</Box>,
 }) {
-  if (items.length) {
+  if (items?.length) {
     return (
       <Grid container spacing={{ xs: 1, sm: 2 }}>
         {items.map((item, index) => (

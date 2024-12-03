@@ -30,6 +30,7 @@ import { useGetEscoProductsQuery } from "../../services/esco";
 import Empty from "../common/utils/Empty";
 import Error from "../common/utils/Error";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
+import PaginatedGridList from "../common/layouts/PaginatedGridList";
 
 export function ProductItem({ product }) {
   return (
@@ -132,7 +133,7 @@ export function AllProductList() {
   if (error) {
     return <Error error={error} />;
   }
-  return <ProductList products={products} setPage={setPage} />;
+  return <ProductList products={products} onSelectPage={setPage} />;
 }
 
 export function EscoProductList() {
@@ -156,22 +157,14 @@ export default function ProductList({
   products,
   onSelectPage = (page) => page,
 }) {
-  if (products?.data) {
-    return (
-      <>
-        <GridList
-          items={products.data}
-          renderItem={(item) => <ProductItem product={item} />}
-          renderEmpty={() => <Empty>No products found</Empty>}
-        />
-        {!!products.meta && (
-          <Pagination
-            pageCount={products.meta.totalPages}
-            currentPage={products.meta.currentPage}
-            onSelectPage={onSelectPage}
-          ></Pagination>
-        )}
-      </>
-    );
-  }
+  return (
+    <>
+      <PaginatedGridList
+        data={products}
+        renderItem={(item) => <ProductItem product={item} />}
+        renderEmpty={() => <Empty>No products found</Empty>}
+        onSelectPage={onSelectPage}
+      />
+    </>
+  );
 }
