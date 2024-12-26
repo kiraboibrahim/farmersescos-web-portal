@@ -9,52 +9,41 @@ import {
 } from "@mui/joy";
 import { useParams } from "react-router";
 import Loading from "../common/utils/Loading";
-import { useGetEscoQuery, useUpdateEscoMutation } from "../../services/esco";
+import { useGetEscoQuery } from "../../services/esco";
 import VerifiedOutlinedIcon from "@mui/icons-material/VerifiedOutlined";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import TextInput from "../common/forms/TextInput";
+import TextInput from "../common/fields/TextInput";
 import { Form } from "formik";
-import CSVInput from "../common/forms/CSVInput";
-import EscoProfileSchema from "../../validation-schemas/esco/EscoProfile.schema";
+import CSVChippedSelect from "../common/fields/CSVChippedSelect";
+import EscoProfileSchema from "../../validation-schemas/esco/EscoProfileSchema";
 import { toast } from "react-toastify";
 import difference from "../../utils/difference";
 import isEmpty from "../../utils/isEmpty";
 import parseError from "../common/utils/parse-error";
-import DirtyFormik from "../common/forms/DirtyFormik";
+import DirtyFormik from "../common/fields/DirtyFormik";
 import { useState } from "react";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
+import useDeleteEsco from "../../hooks/useDeleteEsco";
+import useUpdateEsco from "../../hooks/useUpdateEsco";
 
 export default function EscoProfile() {
   const { id: escoId } = useParams();
-  const [isDirty, setIsDirty] = useState(false);
+  // Determines whether edits have been made to the profile form, if yes, the form is dirty
+  const [isDirtyProfile, setIsDirtyProfile] = useState(false);
+  const [deleteEsco, isDeletingEsco] = useDeleteEsco();
+  const [updateEsco, isUpdatingEsco] = useUpdateEsco();
   const {
     data: esco,
     error: escoFetchError,
-    isFetching: isEscoFetchPending,
+    isFetching: isFetchingEsco,
   } = useGetEscoQuery(escoId);
-  const [
-    updateEsco,
-    {
-      isLoading: isEscoUpdatePending,
-      isError: isEscoUpdateFailed,
-      error: updateEscoError,
-      isSuccess: isEscoUpdateSuccess,
-    },
-  ] = useUpdateEscoMutation();
-  if (isEscoUpdateFailed) {
-    toast.error(parseError(updateEscoError));
-  }
-  if (isEscoUpdateSuccess) {
-    toast.success("Profile updated");
-  }
-  if (!!escoFetchError) {
-    toast.error(escoFetchError?.message || `${escoFetchError}`);
-  }
-  if (isEscoFetchPending) {
-    return <Loading />;
-  }
+
+  if (isFetchingEsco) return <Loading />;
+
+  if (!!escoFetchError) return toast.error(parseError(escoFetchError));
+
   if (!!esco) {
     return (
       <Box
@@ -98,52 +87,48 @@ export default function EscoProfile() {
           buttonFlex={1}
           sx={{ marginTop: 4 }}
         >
-          <Button startDecorator={<DeleteOutlinedIcon />}>Delete</Button>
+          <Button
+            disabled={isDeletingEsco}
+            loading={isDeletingEsco}
+            loadingPosition="start"
+            startDecorator={<DeleteOutlinedIcon />}
+            onClick={async () => {
+              await deleteEsco(escoId);
+            }}
+          >
+            Delete
+          </Button>
 
           <Button startDecorator={<LockResetOutlinedIcon />}>Reset</Button>
         </ButtonGroup>
 
         <DirtyFormik
-          initialValues={{
-            name: esco.name,
-            email: esco.email,
-            phoneNumber: esco.phoneNumber,
-            website: esco.website,
-            latitude: esco.latitude,
-            longitude: esco.longitude,
-            address: esco.address,
-            incorporationDate: esco.incorporationDate,
-            specialization: esco.specialization,
-          }}
+          initialValues={{ ...esco }}
           validationSchema={EscoProfileSchema}
           onSubmit={async (values) => {
             // Submit only values that were updated
             const updatedValues = difference(esco, values);
             if (!isEmpty(updatedValues)) {
-              await updateEsco({ escoId, ...updatedValues });
+              await updateEsco(escoId, updatedValues);
             }
           }}
-          onDirty={(isDirty) => setIsDirty(isDirty)}
+          onDirty={(isDirty) => setIsDirtyProfile(isDirty)}
         >
           <Form>
             <Box sx={{ marginTop: 4 }}>
               <TextInput name="name" label="Name" />
               <TextInput
-                containerSx={{ marginTop: 2 }}
+                sx={{ marginTop: 2 }}
                 name="phoneNumber"
                 label="Phone number"
               />
+              <TextInput sx={{ marginTop: 2 }} name="website" label="Website" />
               <TextInput
-                containerSx={{ marginTop: 2 }}
-                name="website"
-                label="Website"
-              />
-              <TextInput
-                containerSx={{ marginTop: 2 }}
+                sx={{ marginTop: 2 }}
                 label="Email"
                 name="email"
                 endDecorator={
-                  esco.isEmailVerified ? (
+                  esco.isVerified ? (
                     <VerifiedOutlinedIcon color="success" />
                   ) : (
                     <Button variant="soft" size="sm" color="danger">
@@ -158,29 +143,30 @@ export default function EscoProfile() {
                 sx={{ marginTop: 2 }}
               >
                 <TextInput
-                  containerSx={{ flexGrow: 1 }}
+                  sx={{ flexGrow: 1 }}
                   name="latitude"
                   label="Latitude"
                 />
                 <TextInput
-                  containerSx={{ flexGrow: 1 }}
+                  sx={{ flexGrow: 1 }}
                   name="longitude"
                   label="Longitude"
                 />
                 <TextInput
-                  containerSx={{ flexGrow: 1 }}
+                  sx={{ flexGrow: 1 }}
                   name="address"
                   label="Address"
                 />
               </Stack>
               <TextInput
-                containerSx={{ marginTop: 2 }}
+                sx={{ marginTop: 2 }}
                 name="incorporationDate"
                 label="Incorporation Date"
                 type="date"
               />
-              <CSVInput
-                containerSx={{ marginTop: 2 }}
+              <CSVChippedSelect
+                isDynamic={true}
+                sx={{ marginTop: 2 }}
                 name="specialization"
                 label="Specialization"
               />
@@ -192,7 +178,7 @@ export default function EscoProfile() {
                 width: "100%",
                 position: "sticky",
                 bottom: 0,
-                zIndex: "tooltip",
+                zIndex: "fab",
               }}
             >
               <Button
@@ -201,7 +187,7 @@ export default function EscoProfile() {
                 size="md"
                 variant="soft"
                 color="success"
-                disabled={!isDirty || isEscoUpdatePending}
+                disabled={!isDirtyProfile || isUpdatingEsco}
               >
                 Undo Changes
               </Button>
@@ -212,8 +198,8 @@ export default function EscoProfile() {
                 startDecorator={<SaveOutlinedIcon />}
                 sx={{ flexGrow: 2, marginLeft: 2 }}
                 type="submit"
-                disabled={!isDirty || isEscoUpdatePending}
-                loading={isEscoUpdatePending}
+                disabled={!isDirtyProfile || isUpdatingEsco}
+                loading={isUpdatingEsco}
                 loadingPosition="start"
               >
                 Save

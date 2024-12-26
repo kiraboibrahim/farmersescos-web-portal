@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import serializeParams from "../utils/serializeParams";
+import { getAuth } from "./auth";
 
 const ESCO_TAG_TYPE = "Esco";
 
@@ -12,7 +13,7 @@ export const escoApi = createApi({
   endpoints: (builder) => ({
     getEscos: builder.query({
       query: ({ page = 1, search = null }) =>
-        `?${serializeParams({ page, search })}`,
+        `${serializeParams({ page, search })}`,
       providesTags: (result) => {
         return result?.data
           ? result.data.map(({ id }) => ({ type: ESCO_TAG_TYPE, id }))
@@ -54,6 +55,33 @@ export const escoApi = createApi({
       ],
       transformErrorResponse: (response, meta, arg) => response.data,
     }),
+    createEsco: builder.mutation({
+      query: (body) => ({
+        method: "POST",
+        body,
+        headers: {
+          Authorization: `Bearer ${getAuth().token}`,
+        },
+      }),
+      invalidatesTags: [ESCO_TAG_TYPE],
+      transformErrorResponse: (response, meta, arg) => response.data,
+    }),
+    deleteEsco: builder.mutation({
+      query: (escoId) => ({
+        method: "DELETE",
+        url: `${escoId}`,
+        headers: {
+          Authorization: `Bearer ${getAuth().token}`,
+        },
+      }),
+      invalidatesTags: (result, error, escoId) => [
+        {
+          type: ESCO_TAG_TYPE,
+          id: escoId,
+        },
+      ],
+      transformErrorResponse: (response, meta, arg) => response.data,
+    }),
   }),
 });
 
@@ -65,4 +93,6 @@ export const {
   useGetEscoOffersQuery,
   useGetEscoInstallationsQuery,
   useUpdateEscoMutation,
+  useCreateEscoMutation,
+  useDeleteEscoMutation,
 } = escoApi;

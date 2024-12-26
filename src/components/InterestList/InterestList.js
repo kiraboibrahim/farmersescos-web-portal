@@ -1,12 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useGetFarmerFavoriteProductsQuery } from "../../services/farmer";
 import { useState } from "react";
-import Pagination from "../Pagination/Pagination";
 import Loading from "../common/utils/Loading";
 import Empty from "../common/utils/Empty";
-import GridList from "../common/layouts/GridList";
 import Error from "../common/utils/Error";
 import { ProductItem } from "../ProductList/Product.List";
+import PaginatedGridList from "../common/layouts/PaginatedGridList";
 
 function InterestItem({ interest: { product } }) {
   return <ProductItem product={product} />;
@@ -26,24 +25,14 @@ export default function InterestList() {
   if (!!error) {
     return <Error error={error} />;
   }
-  if (interests?.data) {
-    return (
-      <>
-        <GridList
-          items={interests.data}
-          renderItem={(item) => (
-            <InterestItem
-              interest={item}
-              renderEmpty={() => <Empty>No interests found</Empty>}
-            />
-          )}
-        />
-        <Pagination
-          pageCount={interests.meta.totalPages}
-          currentPage={interests.meta.currentPage}
-          onSelectPage={setPage}
-        ></Pagination>
-      </>
-    );
-  }
+  return (
+    <>
+      <PaginatedGridList
+        data={interests}
+        renderItem={(item) => <InterestItem interest={item} />}
+        renderEmpty={() => <Empty>No interests found</Empty>}
+        onSelectPage={setPage}
+      />
+    </>
+  );
 }

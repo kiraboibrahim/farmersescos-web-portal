@@ -7,7 +7,7 @@ import { installationApi } from "./services/installation";
 import authReducer from "./slices/auth";
 import { authApi } from "./services/auth";
 import authMiddleware from "./middleware/auth";
-import { productCategoriesApi } from "./services/product-categories";
+import { productCategoriesApi } from "./services/productCategories";
 
 export const store = configureStore({
   reducer: {

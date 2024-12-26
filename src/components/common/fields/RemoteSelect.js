@@ -6,7 +6,9 @@ import { useTheme } from "@mui/joy/styles";
 const SELECT_OPTION_ACTION = "select-option";
 const REMOVE_OPTION_ACTION = "remove-value";
 
-export default function Select({
+export default function RemoteSelect({
+  name,
+  label,
   defaultOptions = true,
   getOptions,
   getOptionLabel,
@@ -21,10 +23,9 @@ export default function Select({
     ,
     { value: selectedOptions, touched, error },
     { setValue, setError, setTouched },
-  ] = useField(props);
+  ] = useField({ name, ...props });
 
-  const { label } = props;
-
+  const hasError = touched && !!error;
   function handleAction(action, option) {
     setTouched(true);
     switch (action) {
@@ -58,7 +59,7 @@ export default function Select({
   }
 
   return (
-    <FormControl sx={containerSx} error={!!(touched && error)}>
+    <FormControl sx={containerSx} error={hasError}>
       <FormLabel>{label}</FormLabel>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         <AsyncSelect
@@ -90,7 +91,7 @@ export default function Select({
           }}
         />
       </Box>
-      {!!(touched && error) && (
+      {hasError && (
         <FormHelperText sx={{ fontSize: "sm" }}>{error}</FormHelperText>
       )}
     </FormControl>

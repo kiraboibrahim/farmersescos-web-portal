@@ -15,12 +15,11 @@ import Loading from "../common/utils/Loading";
 import { useGetFarmerInstallationsQuery } from "../../services/farmer";
 import { useGetEscoInstallationsQuery } from "../../services/esco";
 
-import Pagination from "../Pagination/Pagination";
 import StarRating from "../common/utils/StarRating";
 import Error from "../common/utils/Error";
-import GridList from "../common/layouts/GridList";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import Empty from "../common/utils/Empty";
+import PaginatedGridList from "../common/layouts/PaginatedGridList";
 
 function InstallationItem({ installation }) {
   return (
@@ -57,10 +56,11 @@ function InstallationItem({ installation }) {
         <IconButton>
           <AgricultureOutlinedIcon />
         </IconButton>
-        <Typography
-          level="body-sm"
-          sx={{ alignSelf: "center" }}
-        >{`${installation.farmer.firstName} ${installation.farmer.lastName}`}</Typography>
+        <Typography level="body-sm" sx={{ alignSelf: "center" }}>
+          {!!installation?.farmer
+            ? `${installation.farmer.firstName} ${installation.farmer.lastName}`
+            : "N/A"}
+        </Typography>
       </Stack>
       <Link
         sx={{
@@ -81,7 +81,7 @@ function InstallationItem({ installation }) {
   );
 }
 
-export default function FarmerInstallationList() {
+export function FarmerInstallationList() {
   const { id: farmerId } = useParams();
 
   const [page, setPage] = useState(1);
@@ -121,20 +121,12 @@ export function EscoInstallationList() {
 }
 
 function InstallationList({ installations, onSelectPage = (page) => page }) {
-  if (installations?.data) {
-    return (
-      <>
-        <GridList
-          items={installations.data}
-          renderItem={(item) => <InstallationItem installation={item} />}
-          renderEmpty={() => <Empty>No installations found</Empty>}
-        />
-        <Pagination
-          pageCount={installations.meta.totalPages}
-          currentPage={installations.meta.currentPage}
-          onSelectPage={onSelectPage}
-        ></Pagination>
-      </>
-    );
-  }
+  return (
+    <PaginatedGridList
+      data={installations}
+      renderItem={(item) => <InstallationItem installation={item} />}
+      renderEmpty={() => <Empty>No installations found</Empty>}
+      onSelectPage={onSelectPage}
+    />
+  );
 }

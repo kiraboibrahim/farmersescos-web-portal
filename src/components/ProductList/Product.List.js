@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/joy";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import {
@@ -22,25 +21,24 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useGetProductsQuery } from "../../services/product";
-import Pagination from "../Pagination/Pagination";
 import { useState } from "react";
 import Loading from "../common/utils/Loading";
-import GridList from "../common/layouts/GridList";
 import { useGetEscoProductsQuery } from "../../services/esco";
 import Empty from "../common/utils/Empty";
 import Error from "../common/utils/Error";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import PaginatedGridList from "../common/layouts/PaginatedGridList";
+import toTitleCase from "../../utils/toTitleCase";
 
 export function ProductItem({ product }) {
   return (
     <Card size="sm">
       <CardContent orientation="horizontal">
         <Avatar
-          src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${product.esco.profilePhoto}`}
+          src={resolvePhotoSrc(product.esco.profilePhoto)}
           sx={{ marginRight: 1 }}
         >
-          {product.esco.name}
+          {toTitleCase(product.esco.name)}
         </Avatar>
         <Typography
           level="body-sm"
@@ -52,7 +50,7 @@ export function ProductItem({ product }) {
             whiteSpace: "nowrap",
           }}
         >
-          {product.esco.name}
+          {toTitleCase(product.esco.name)}
         </Typography>
         <Box sx={{ marginLeft: "auto" }}>
           <Dropdown>
@@ -63,9 +61,9 @@ export function ProductItem({ product }) {
               <MenuItem>
                 <Typography
                   level="body-sm"
-                  startDecorator={<ModeEditOutlinedIcon />}
+                  startDecorator={<StarBorderOutlinedIcon />}
                 >
-                  Edit
+                  Promote
                 </Typography>
               </MenuItem>
               <MenuItem>
@@ -74,14 +72,6 @@ export function ProductItem({ product }) {
                   startDecorator={<DeleteOutlinedIcon />}
                 >
                   Delete
-                </Typography>
-              </MenuItem>
-              <MenuItem>
-                <Typography
-                  level="body-sm"
-                  startDecorator={<StarBorderOutlinedIcon />}
-                >
-                  Feature
                 </Typography>
               </MenuItem>
             </Menu>
@@ -103,7 +93,7 @@ export function ProductItem({ product }) {
         overlay
         underline="none"
       >
-        <Typography level="title-md">{product.name}</Typography>
+        <Typography level="title-md">{toTitleCase(product.name)}</Typography>
       </Link>
       <Typography
         level="body-xs"
@@ -153,10 +143,7 @@ export function EscoProductList() {
   return <ProductList products={products} onSelectPage={setPage} />;
 }
 
-export default function ProductList({
-  products,
-  onSelectPage = (page) => page,
-}) {
+export default function ProductList({ products, onSelectPage }) {
   return (
     <>
       <PaginatedGridList

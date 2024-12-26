@@ -1,7 +1,10 @@
 function removeEmpty(obj) {
+  function isString(value) {
+    return typeof value === "string";
+  }
   return Object.fromEntries(
     Object.entries(obj)
-      .filter(([_, v]) => v != null)
+      .filter(([_, v]) => (isString(v) && v !== "") || v != null)
       .map(([k, v]) => [k, v === Object(v) ? removeEmpty(v) : v])
   );
 }

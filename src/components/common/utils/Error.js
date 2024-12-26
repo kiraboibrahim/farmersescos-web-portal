@@ -2,7 +2,6 @@ import { Sheet, Typography } from "@mui/joy";
 import parseError from "./parse-error";
 
 export default function Error({ error }) {
-  console.log(error);
   return (
     <Sheet
       sx={{

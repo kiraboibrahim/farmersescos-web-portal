@@ -2,6 +2,7 @@ import { Box } from "@mui/joy";
 import { Outlet } from "react-router";
 import Header from "../Header/Header";
 import Nav from "../Nav/Nav";
+import ToolBar from "../ToolBar/ToolBar";
 
 export default function Main() {
   return (
@@ -21,6 +22,9 @@ export default function Main() {
           paddingRight: { xs: 3, sm: 4, md: 5 },
         }}
       >
+        <ToolBar
+          sx={{ position: "fixed", bottom: 30, right: 30, zIndex: "popup" }}
+        />
         <Outlet />
       </Box>
     </>

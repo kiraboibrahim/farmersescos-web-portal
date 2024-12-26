@@ -10,7 +10,6 @@ import {
 } from "@mui/joy";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import { Link as RouterLink } from "react-router-dom";
-import GridList from "../common/layouts/GridList";
 import { useGetFarmerOffersQuery } from "../../services/farmer";
 import { useGetEscoOffersQuery } from "../../services/esco";
 import { useParams } from "react-router";
@@ -18,8 +17,8 @@ import { toast } from "react-toastify";
 import Loading from "../common/utils/Loading";
 import Empty from "../common/utils/Empty";
 import { useState } from "react";
-import Pagination from "../Pagination/Pagination";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
+import PaginatedGridList from "../common/layouts/PaginatedGridList";
 
 function OfferItem({
   offer: { product, esco, farmer, isAccepted, expiryDate },
@@ -106,7 +105,7 @@ export function FarmerOfferList() {
     return toast.error(error?.message);
   }
   if (!!offers) {
-    return <OfferList offers={offers} setPage={setPage} />;
+    return <OfferList offers={offers} onSelectPage={setPage} />;
   }
 }
 
@@ -125,27 +124,17 @@ export function EscoOfferList() {
     return toast.error(error?.message);
   }
   if (!!offers) {
-    return <OfferList offers={offers} setPage={setPage} />;
+    return <OfferList offers={offers} onSelectPage={setPage} />;
   }
 }
 
-function OfferList({ offers, setPage = (page) => page }) {
-  if (offers?.data) {
-    return (
-      <>
-        <GridList
-          items={offers.data}
-          renderItem={(item) => <OfferItem offer={item} />}
-          renderEmpty={() => <Empty>No offers found</Empty>}
-        />
-        {!!offers.meta && (
-          <Pagination
-            pageCount={offers.meta.totalPages}
-            currentPage={offers.meta.currentPage}
-            onSelectPage={setPage}
-          ></Pagination>
-        )}
-      </>
-    );
-  }
+function OfferList({ offers, onSelectPage }) {
+  return (
+    <PaginatedGridList
+      data={offers}
+      renderItem={(item) => <OfferItem offer={item} />}
+      renderEmpty={() => <Empty>No offers found</Empty>}
+      onSelectPage={onSelectPage}
+    />
+  );
 }

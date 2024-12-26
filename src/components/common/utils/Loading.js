@@ -2,11 +2,8 @@ import { Box, CircularProgress } from "@mui/joy";
 export default function Loading({ size = "md" }) {
   let height;
   switch (size) {
-    case "xs":
-      height = 20;
-      break;
     case "sm":
-      height = 40;
+      height = 30;
       break;
     case "md":
       height = 70;

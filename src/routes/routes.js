@@ -1,20 +1,10 @@
+import { lazy } from "react";
+import { lazily } from "react-lazily";
 import FarmerList from "../components/FarmerList/FarmerList";
-import {
-  AllProductList,
-  EscoProductList,
-} from "../components/ProductList/Product.List";
+import { AllProductList } from "../components/ProductList/Product.List";
 import EscoList from "../components/EscoList/EscoList";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Main from "../components/Main/Main";
-import FarmerDetail from "../components/FarmerDetail/FarmerDetail";
-import EscoDetail from "../components/EscoDetail/EscoDetail";
-import InterestList from "../components/InterestList/InterestList";
-import FarmerProfile from "../components/FarmerProfile/FarmerProfile";
-import EscoProfile from "../components/EscoProfile/EscoProfile";
-import ProductDetail from "../components/ProductDetail/ProductDetail";
-import FarmerInstallationList, {
-  EscoInstallationList,
-} from "../components/InstallationList/InstallationList";
 import Login from "../components/Login/Login";
 import SuperAdminRequired from "../components/SuperAdminRequired/SuperAdminRequired";
 import {
@@ -22,7 +12,28 @@ import {
   FarmerOfferList,
 } from "../components/OfferList/OfferList";
 import { FarmerRecommendationList } from "../components/FarmerRecommendationList/FarmerRecommendationList";
-
+import { Suspense } from "react";
+import Loading from "../components/common/utils/Loading";
+const FarmerDetail = lazy(() =>
+  import("../components/FarmerDetail/FarmerDetail")
+);
+const EscoDetail = lazy(() => import("../components/EscoDetail/EscoDetail"));
+const { EscoProductList } = lazily(() =>
+  import("../components/ProductList/Product.List")
+);
+const InterestList = lazy(() =>
+  import("../components/InterestList/InterestList")
+);
+const FarmerProfile = lazy(() =>
+  import("../components/FarmerProfile/FarmerProfile")
+);
+const EscoProfile = lazy(() => import("../components/EscoProfile/EscoProfile"));
+const ProductDetail = lazy(() =>
+  import("../components/ProductDetail/ProductDetail")
+);
+const { FarmerInstallationList, EscoInstallationList } = lazily(() =>
+  import("../components/InstallationList/InstallationList")
+);
 const routes = [
   {
     path: "/",
@@ -46,7 +57,11 @@ const routes = [
       },
       {
         path: "/farmers/:id",
-        element: <FarmerDetail />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <FarmerDetail />
+          </Suspense>
+        ),
         children: [
           {
             index: true,
@@ -80,7 +95,11 @@ const routes = [
       },
       {
         path: "/escos/:id",
-        element: <EscoDetail />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <EscoDetail />
+          </Suspense>
+        ),
         children: [
           {
             index: true,
@@ -106,13 +125,21 @@ const routes = [
       },
       {
         path: "products/:id",
-        element: <ProductDetail />,
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ProductDetail />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: "/farmers/:id",
-    element: <FarmerDetail />,
+    element: (
+      <Suspense fallback={<Loading />}>
+        <FarmerDetail />
+      </Suspense>
+    ),
   },
   {
     path: "/login",

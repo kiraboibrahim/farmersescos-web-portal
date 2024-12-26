@@ -14,7 +14,7 @@ import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import TextInput from "../common/forms/TextInput";
+import TextInput from "../common/fields/TextInput";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import {
   useGetProductQuery,
@@ -22,16 +22,16 @@ import {
 } from "../../services/product";
 import Loading from "../common/utils/Loading";
 import { Form } from "formik";
-import Textarea from "../common/forms/Textarea";
+import Textarea from "../common/fields/Textarea";
 import { toast } from "react-toastify";
-import Select from "../common/forms/Select";
+import RemoteSelect from "../common/fields/RemoteSelect";
 import { useState } from "react";
 import ProductSchema from "../../validation-schemas/product/Product.schema";
 import difference from "../../utils/difference";
 import isEmpty from "../../utils/isEmpty";
-import { useLazyGetProductsCategoriesQuery } from "../../services/product-categories";
+import { useLazyGetProductsCategoriesQuery } from "../../services/productCategories";
 import parseError from "../common/utils/parse-error";
-import DirtyFormik from "../common/forms/DirtyFormik";
+import DirtyFormik from "../common/fields/DirtyFormik";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 
 export default function ProductDetail() {
@@ -59,7 +59,7 @@ export default function ProductDetail() {
     return <Loading />;
   }
   if (!!productFetchError) {
-    toast.error(productFetchError?.message || `${productFetchError}`);
+    toast.error(parseError(productFetchError));
   }
 
   if (isProductUpdateFailed) {
@@ -172,7 +172,7 @@ export default function ProductDetail() {
               name="name"
               label="Product name"
             />
-            <Select
+            <RemoteSelect
               containerSx={{ marginTop: 2 }}
               isMulti={true}
               name="categories"

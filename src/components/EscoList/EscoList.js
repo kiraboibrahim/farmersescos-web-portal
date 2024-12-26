@@ -14,7 +14,6 @@ import {
 } from "@mui/joy";
 import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useGetEscosQuery } from "../../services/esco";
 import Pagination from "../Pagination/Pagination";
@@ -24,10 +23,17 @@ import Error from "../common/utils/Error";
 import GridList from "../common/layouts/GridList";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import Empty from "../common/utils/Empty";
+import useDeleteEsco from "../../hooks/useDeleteEsco";
+import toTitleCase from "../../utils/toTitleCase";
 
 function EscoItem({ esco }) {
+  const [deleteEsco, isDeletingEsco] = useDeleteEsco();
   return (
-    <Card size="sm">
+    <Card
+      size="sm"
+      variant={isDeletingEsco ? "soft" : "outlined"}
+      color={isDeletingEsco ? "danger" : "neutral"}
+    >
       <CardContent orientation="horizontal">
         <Box>
           <Avatar
@@ -55,22 +61,14 @@ function EscoItem({ esco }) {
           }}
           level="body-sm"
         >
-          {esco.name}
+          {toTitleCase(esco.name)}
         </Link>
         <Dropdown>
           <MenuButton slots={{ root: IconButton }}>
             <MoreVertIcon />
           </MenuButton>
           <Menu>
-            <MenuItem>
-              <Typography
-                level="body-sm"
-                startDecorator={<ModeEditOutlinedIcon />}
-              >
-                Edit
-              </Typography>
-            </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={async () => await deleteEsco(esco.id)}>
               <Typography
                 level="body-sm"
                 startDecorator={<DeleteOutlinedIcon />}

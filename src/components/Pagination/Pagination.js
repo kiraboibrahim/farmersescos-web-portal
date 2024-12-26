@@ -18,7 +18,7 @@ export default function Pagination({ onSelectPage, currentPage, pageCount }) {
         marginBottom: 3,
         position: "sticky",
         bottom: "0",
-        zIndex: "tooltip",
+        zIndex: "mobileStepper",
       }}
     >
       <ButtonGroup color="success">

@@ -5,26 +5,26 @@ const today = new Date();
 
 const EscoProfileSchema = Yup.object({
   name: Yup.string()
-    .max(100, "Must be 100 characters or less")
-    .required("Esco name is required"),
+    .required("Name is required")
+    .min(3, "Provide atleast 3 characters")
+    .max(100, "Name can't be longer than 100 characters"),
   email: Yup.string().email().required("Email is required"),
   phoneNumber: Yup.string()
+    .required("Phone number is required")
     .matches(UG_PHONE_NUMBER_REGEX, {
-      message: "Must be a Ugandan phone number",
-    })
-    .required(
-      "Phone number is required. It will be used to reset your password"
-    ),
+      message: "Provide a valid Ugandan phone number",
+    }),
+
   website: Yup.string()
     .matches(DOMAIN_REGEX, {
-      message: "Must be a valid domain i.e www.example.com",
+      message: "Provide a valid domain e.g www.example.com",
     })
     .notRequired(),
   latitude: Yup.number().notRequired(),
   longitude: Yup.number().notRequired(),
   incorporationDate: Yup.date()
     .max(`${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`)
-    .required("Incoporation Date is required"),
+    .required("Date of incorporation is required"),
   address: Yup.string().required("Address is required"),
   specialization: Yup.string().required("Specialization is required"),
 });

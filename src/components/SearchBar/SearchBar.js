@@ -70,7 +70,7 @@ function SearchResults({
                   </Link>
                 </CardContent>
               </Card>
-              {loading[key] && <Loading size="xs" />}
+              {loading[key] && <Loading size="sm" />}
               {results.map((result, index) => (
                 <SearchResult
                   key={index}
@@ -166,14 +166,14 @@ export default function SearchBar({ containersx = {}, ...props }) {
     setSearchQuery("");
     searchParams.delete("search");
     setSearchParams(searchParams);
-    handleSearchPopupClose();
+    handleResultsPopupClose();
   }
   function handleChange({ target }) {
     setSearchQuery(target.value);
     setIsOpen(target.value.trim() !== "");
   }
 
-  function handleSearchPopupClose() {
+  function handleResultsPopupClose() {
     setIsOpen(false);
   }
 
@@ -201,13 +201,13 @@ export default function SearchBar({ containersx = {}, ...props }) {
       });
   }, [debouncedSearchQuery, fetchProducts, fetchFarmers, fetchEscos]);
   return (
-    <ClickAwayListener onClickAway={handleSearchPopupClose}>
+    <ClickAwayListener onClickAway={handleResultsPopupClose}>
       <Box sx={containersx}>
         <Input
           ref={inputRef}
           onChange={handleChange}
           onFocus={({ target }) => setIsOpen(target.value.trim() !== "")}
-          placeholder="Search"
+          placeholder="Search farmers, escos, products"
           value={unDebouncedSearchQuery}
           endDecorator={
             unDebouncedSearchQuery !== "" && (
@@ -248,7 +248,7 @@ export default function SearchBar({ containersx = {}, ...props }) {
                 [FARMERS]: isFetchingFarmers,
                 [ESCOS]: isFetchingEscos,
               }}
-              onSearchResultClick={handleSearchPopupClose}
+              onSearchResultClick={handleResultsPopupClose}
               searchQuery={unDebouncedSearchQuery}
             />
           </MenuList>

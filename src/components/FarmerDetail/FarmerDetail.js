@@ -11,6 +11,7 @@ import { NavLink as RouterLink, Outlet, useParams } from "react-router-dom";
 import { useGetFarmerQuery } from "../../services/farmer";
 import Loading from "../common/utils/Loading";
 import Error from "../common/utils/Error";
+import resolvePhotoSrc from "../../utils/resolve-photo-src";
 
 export default function FarmerDetail() {
   const { id: farmerId } = useParams();
@@ -27,18 +28,20 @@ export default function FarmerDetail() {
       <>
         <Card orientation="horizontal" sx={{ marginBottom: 5 }}>
           <CardContent orientation="horizontal">
-            <Avatar
-              size="lg"
-              src={`${process.env.REACT_APP_MEDIA_BASE_URL}/${farmer.profilePhoto}`}
-            >
+            <Avatar size="lg" src={resolvePhotoSrc(farmer.profilePhoto)}>
               {farmer.lastName}
             </Avatar>
             <Box>
               <Typography level="h3">{`${farmer.firstName} ${farmer.lastName}`}</Typography>
 
               <Box level="body-xs" sx={{ marginTop: 1 }}>
-                {farmer.cropsGrown.split(",").map((crop) => (
-                  <Chip size="sm" color="success" sx={{ marginRight: 1 }}>
+                {farmer.cropsGrown.split(",").map((crop, index) => (
+                  <Chip
+                    size="sm"
+                    key={index}
+                    color="success"
+                    sx={{ marginRight: 1 }}
+                  >
                     {crop}
                   </Chip>
                 ))}

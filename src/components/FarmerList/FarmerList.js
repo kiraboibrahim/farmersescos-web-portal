@@ -13,21 +13,26 @@ import {
   Typography,
 } from "@mui/joy";
 import { Link as RouterLink, useSearchParams } from "react-router-dom";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useGetFarmersQuery } from "../../services/farmer";
 import { useState } from "react";
-import Pagination from "../Pagination/Pagination";
 import Loading from "../common/utils/Loading";
-import GridList from "../common/layouts/GridList";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import Empty from "../common/utils/Empty";
 import Error from "../common/utils/Error";
+import PaginatedGridList from "../common/layouts/PaginatedGridList";
+import toTitleCase from "../../utils/toTitleCase";
+import useDeleteFarmer from "../../hooks/useDeleteFarmer";
 
 function FarmerItem({ farmer }) {
+  const [deleteFarmer, isDeletingFarmer] = useDeleteFarmer();
   return (
-    <Card size="sm">
+    <Card
+      size="sm"
+      variant={isDeletingFarmer ? "soft" : "outlined"}
+      color={isDeletingFarmer ? "danger" : "neutral"}
+    >
       <CardContent orientation="horizontal">
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Avatar
@@ -53,7 +58,7 @@ function FarmerItem({ farmer }) {
               color="neutral"
               overlay
             >
-              {`${farmer.firstName} ${farmer.lastName}`}
+              {toTitleCase(`${farmer.firstName} ${farmer.lastName}`)}
             </Link>
           </Typography>
         </Box>
@@ -63,15 +68,7 @@ function FarmerItem({ farmer }) {
               <MoreVertIcon />
             </MenuButton>
             <Menu>
-              <MenuItem>
-                <Typography
-                  level="body-sm"
-                  startDecorator={<ModeEditOutlinedIcon />}
-                >
-                  Edit
-                </Typography>
-              </MenuItem>
-              <MenuItem>
+              <MenuItem onClick={async () => await deleteFarmer(farmer.id)}>
                 <Typography
                   level="body-sm"
                   startDecorator={<DeleteOutlinedIcon />}
@@ -112,24 +109,18 @@ export default function FarmerList() {
   if (isFetching) {
     return <Loading />;
   }
-  if (farmersFetchError) {
+  if (!!farmersFetchError) {
     return <Error error={farmersFetchError} />;
   }
 
   if (farmers?.data) {
     return (
-      <>
-        <GridList
-          items={farmers.data}
-          renderItem={(item) => <FarmerItem farmer={item} />}
-          renderEmpty={() => <Empty>No farmers found</Empty>}
-        />
-        <Pagination
-          pageCount={farmers.meta.totalPages}
-          currentPage={farmers.meta.currentPage}
-          onSelectPage={setPage}
-        ></Pagination>
-      </>
+      <PaginatedGridList
+        data={farmers}
+        renderItem={(item) => <FarmerItem farmer={item} />}
+        renderEmpty={() => <Empty>No farmers found</Empty>}
+        onSelectPage={setPage}
+      />
     );
   }
 }
