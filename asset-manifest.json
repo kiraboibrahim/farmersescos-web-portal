@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/farmersescos-web-portal/static/css/main.bc409982.css",
-    "main.js": "/farmersescos-web-portal/static/js/main.13f00df6.js",
+    "main.js": "/farmersescos-web-portal/static/js/main.369d696c.js",
     "static/js/940.85618e9a.chunk.js": "/farmersescos-web-portal/static/js/940.85618e9a.chunk.js",
     "static/js/318.c7facdd9.chunk.js": "/farmersescos-web-portal/static/js/318.c7facdd9.chunk.js",
     "static/js/188.1977e115.chunk.js": "/farmersescos-web-portal/static/js/188.1977e115.chunk.js",
     "static/js/62.1756c5e9.chunk.js": "/farmersescos-web-portal/static/js/62.1756c5e9.chunk.js",
     "static/js/40.49d37221.chunk.js": "/farmersescos-web-portal/static/js/40.49d37221.chunk.js",
-    "static/js/125.2b303c8e.chunk.js": "/farmersescos-web-portal/static/js/125.2b303c8e.chunk.js",
+    "static/js/956.e84b66b5.chunk.js": "/farmersescos-web-portal/static/js/956.e84b66b5.chunk.js",
     "static/js/527.09885a32.chunk.js": "/farmersescos-web-portal/static/js/527.09885a32.chunk.js",
     "static/js/453.2add11be.chunk.js": "/farmersescos-web-portal/static/js/453.2add11be.chunk.js",
     "static/js/942.3268b961.chunk.js": "/farmersescos-web-portal/static/js/942.3268b961.chunk.js",
@@ -30,13 +30,13 @@
     "static/media/inter-vietnamese-400-normal.woff2": "/farmersescos-web-portal/static/media/inter-vietnamese-400-normal.44c9df135eec470b0ab6.woff2",
     "index.html": "/farmersescos-web-portal/index.html",
     "main.bc409982.css.map": "/farmersescos-web-portal/static/css/main.bc409982.css.map",
-    "main.13f00df6.js.map": "/farmersescos-web-portal/static/js/main.13f00df6.js.map",
+    "main.369d696c.js.map": "/farmersescos-web-portal/static/js/main.369d696c.js.map",
     "940.85618e9a.chunk.js.map": "/farmersescos-web-portal/static/js/940.85618e9a.chunk.js.map",
     "318.c7facdd9.chunk.js.map": "/farmersescos-web-portal/static/js/318.c7facdd9.chunk.js.map",
     "188.1977e115.chunk.js.map": "/farmersescos-web-portal/static/js/188.1977e115.chunk.js.map",
     "62.1756c5e9.chunk.js.map": "/farmersescos-web-portal/static/js/62.1756c5e9.chunk.js.map",
     "40.49d37221.chunk.js.map": "/farmersescos-web-portal/static/js/40.49d37221.chunk.js.map",
-    "125.2b303c8e.chunk.js.map": "/farmersescos-web-portal/static/js/125.2b303c8e.chunk.js.map",
+    "956.e84b66b5.chunk.js.map": "/farmersescos-web-portal/static/js/956.e84b66b5.chunk.js.map",
     "527.09885a32.chunk.js.map": "/farmersescos-web-portal/static/js/527.09885a32.chunk.js.map",
     "453.2add11be.chunk.js.map": "/farmersescos-web-portal/static/js/453.2add11be.chunk.js.map",
     "942.3268b961.chunk.js.map": "/farmersescos-web-portal/static/js/942.3268b961.chunk.js.map",
@@ -44,6 +44,6 @@
   },
   "entrypoints": [
     "static/css/main.bc409982.css",
-    "static/js/main.13f00df6.js"
+    "static/js/main.369d696c.js"
   ]
 }
