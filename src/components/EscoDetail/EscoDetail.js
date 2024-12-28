@@ -13,7 +13,8 @@ import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import Loading from "../common/utils/Loading";
 import Error from "../common/utils/Error";
-import placeholderImage from "../../assets/placeholder.jpg";
+import toTitleCase from "../../utils/toTitleCase";
+import resolvePhotoSrc from "../../utils/resolve-photo-src";
 
 export default function EscoDetail() {
   const { id: escoId } = useParams();
@@ -30,19 +31,12 @@ export default function EscoDetail() {
       <>
         <Card sx={{ marginBottom: 5 }}>
           <CardContent orientation="horizontal">
-            <Avatar
-              size="lg"
-              src={
-                esco.profilePhoto
-                  ? `${process.env.REACT_APP_MEDIA_BASE_URL}/${esco.profilePhoto}`
-                  : placeholderImage
-              }
-            >
+            <Avatar size="lg" src={resolvePhotoSrc(esco.profilePhoto)}>
               {esco.name}
             </Avatar>
             <Box>
-              <Typography level="h3">{esco.name}</Typography>
-              <Box level="body-xs" sx={{ marginTop: 1 }}>
+              <Typography level="h3">{toTitleCase(esco.name)}</Typography>
+              <Box level="body-xs" sx={{ marginTop: 1, overflow: "hidden" }}>
                 {esco.specialization.split(",").map((specialization, index) => (
                   <Chip
                     key={index}
@@ -54,7 +48,11 @@ export default function EscoDetail() {
                   </Chip>
                 ))}
               </Box>
-              <Stack direction="row" sx={{ marginTop: 1 }}>
+              <Stack
+                direction={{ xs: "column", md: "row" }}
+                spacing={1}
+                sx={{ marginTop: 1, overflow: "hidden" }}
+              >
                 <Typography
                   level="body-xs"
                   startDecorator={<LocationOnOutlinedIcon />}
@@ -63,7 +61,6 @@ export default function EscoDetail() {
                 </Typography>
                 <Typography
                   level="body-xs"
-                  sx={{ marginLeft: 2 }}
                   startDecorator={<PhoneAndroidOutlinedIcon />}
                 >
                   {esco.phoneNumber}

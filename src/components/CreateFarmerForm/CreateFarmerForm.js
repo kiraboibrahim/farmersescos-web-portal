@@ -27,18 +27,13 @@ export default function CreateFarmerForm() {
           sx={{ marginBottom: 2 }}
         >
           <TextInput
-            containerSx={{ flexGrow: 1 }}
             name="firstName"
             label="First name"
-            sx={{ marginBottom: { xs: 2, sm: 0 } }}
+            sx={{ flexGrow: 1, marginBottom: { xs: 2, sm: 0 } }}
           />
-          <TextInput
-            containerSx={{ flexGrow: 1 }}
-            label="Last name"
-            name="lastName"
-          />
+          <TextInput sx={{ flexGrow: 1 }} label="Last name" name="lastName" />
         </Stack>
-        <TextInput name="phoneNumber" type="tel" label="Mobile" />
+        <TextInput name="phoneNumber" type="tel" label="Phone number" />
       </FormWizardStep>
 
       <FormWizardStep stepIndex={2} validationSchema={FarmerLocationSchema}>
@@ -46,60 +41,48 @@ export default function CreateFarmerForm() {
           name="latitude"
           label="Latitude"
           type="number"
-          containerSx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="longitude"
           label="Longitude"
           type="number"
-          containerSx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
-        <TextInput
-          name="address"
-          label="Address"
-          containerSx={{ marginBottom: 1 }}
-        />
+        <TextInput name="address" label="Address" sx={{ marginBottom: 2 }} />
       </FormWizardStep>
 
       <FormWizardStep stepIndex={3} validationSchema={FarmDetailsSchema}>
-        <TextInput
-          name="farmName"
-          label="Farm name"
-          containerSx={{ marginBottom: 1 }}
-        />
+        <TextInput name="farmName" label="Farm name" sx={{ marginBottom: 2 }} />
         <TextInput
           name="farmEstablishedOn"
           label="When was the farm established?"
           type="date"
-          containerSx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
-        <TextInput
-          name="farmSize"
-          label="Farm size"
-          containerSx={{ marginBottom: 1 }}
-        />
+        <TextInput name="farmSize" label="Farm size" sx={{ marginBottom: 2 }} />
         <Textarea
           name="farmDescription"
           label="Farm description"
-          containerSx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <CSVChippedSelect
           name="animalsKept"
           label="What animals do you rear?"
           options={ANIMALS}
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="animalsPerType"
           label="For each animal selected, how many animals do you rear?"
           placeholder="10,15,20"
-          containerSx={{ marginBottom: 1 }}
+          containerSx={{ marginBottom: 2 }}
         />
         <CSVChippedSelect
           name="cropsGrown"
           label="What crops do you grow?"
           options={CROPS}
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="acreagePerCrop"

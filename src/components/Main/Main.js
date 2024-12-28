@@ -23,7 +23,7 @@ export default function Main() {
         }}
       >
         <ToolBar
-          sx={{ position: "fixed", bottom: 30, right: 30, zIndex: "popup" }}
+          sx={{ position: "fixed", bottom: 80, right: 50, zIndex: "popup" }}
         />
         <Outlet />
       </Box>

@@ -12,6 +12,7 @@ import { useGetFarmerQuery } from "../../services/farmer";
 import Loading from "../common/utils/Loading";
 import Error from "../common/utils/Error";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
+import toTitleCase from "../../utils/toTitleCase";
 
 export default function FarmerDetail() {
   const { id: farmerId } = useParams();
@@ -26,13 +27,18 @@ export default function FarmerDetail() {
   if (!!farmer) {
     return (
       <>
-        <Card orientation="horizontal" sx={{ marginBottom: 5 }}>
+        <Card
+          orientation="horizontal"
+          sx={{ marginBottom: 5, overflow: "hidden" }}
+        >
           <CardContent orientation="horizontal">
             <Avatar size="lg" src={resolvePhotoSrc(farmer.profilePhoto)}>
               {farmer.lastName}
             </Avatar>
             <Box>
-              <Typography level="h3">{`${farmer.firstName} ${farmer.lastName}`}</Typography>
+              <Typography level="h3">
+                {toTitleCase(`${farmer.firstName} ${farmer.lastName}`)}
+              </Typography>
 
               <Box level="body-xs" sx={{ marginTop: 1 }}>
                 {farmer.cropsGrown.split(",").map((crop, index) => (
@@ -40,7 +46,7 @@ export default function FarmerDetail() {
                     size="sm"
                     key={index}
                     color="success"
-                    sx={{ marginRight: 1 }}
+                    sx={{ marginRight: 1, overflow: "scroll" }}
                   >
                     {crop}
                   </Chip>

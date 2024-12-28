@@ -25,49 +25,49 @@ export default function CreateEscoForm() {
       }}
     >
       <Form>
-        <TextInput name="name" label="Name" sx={{ marginBottom: 1 }} />
+        <TextInput name="name" label="Name" sx={{ marginBottom: 2 }} />
         <TextInput
           name="email"
           label="Email"
           type="email"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="phoneNumber"
           label="Phone number"
           type="tel"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="website"
           label="Website"
           placeholder="example.com"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
-        <TextInput name="address" label="Address" sx={{ marginBottom: 1 }} />
+        <TextInput name="address" label="Address" sx={{ marginBottom: 2 }} />
         <TextInput
           name="latitude"
           label="Latitude"
           type="number"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="longitude"
           label="Longitude"
           type="number"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <TextInput
           name="incorporationDate"
           label="Date of Incorporation"
           type="date"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <CSVChippedSelect
           isDynamic={true}
           name="specialization"
           label="What do you specialize in?"
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
         <Stack direction="row">
           <Button

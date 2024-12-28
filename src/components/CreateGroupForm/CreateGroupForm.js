@@ -12,44 +12,36 @@ export default function CreateGroupForm() {
       onSubmit={(values) => console.log(values)}
     >
       <FormWizardStep stepIndex={1}>
-        <TextInput name="name" label="Name" containerSx={{ marginBottom: 1 }} />
+        <TextInput name="name" label="Name" sx={{ marginBottom: 2 }} />
         <TextInput
           name="email"
           label="Email"
           type="email"
-          containerSx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
-        <TextInput
-          name="address"
-          label="Address"
-          containerSx={{ marginBottom: 1 }}
-        />
-        <TextInput
-          name="website"
-          label="Website"
-          containerSx={{ marginBottom: 1 }}
-        />
+        <TextInput name="address" label="Address" sx={{ marginBottom: 2 }} />
+        <TextInput name="website" label="Website" sx={{ marginBottom: 2 }} />
         <LocalSelect
           label="What kind of group is this?"
           name="type"
           defaultValue="SACCO"
           options={["SACCO", "COOPERATIVE", "OTHER"]}
-          sx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         ></LocalSelect>
         <Textarea name="description" label="Tell us more about this group" />
       </FormWizardStep>
 
       <FormWizardStep stepIndex={2}>
-        <Stack direction={{ sm: "column", md: "row" }} sx={{ marginBottom: 1 }}>
+        <Stack direction={{ sm: "column", md: "row" }} sx={{ marginBottom: 2 }}>
           <TextInput
             name="firstName"
             label="First name"
-            containerSx={{ flex: "1 1 auto" }}
+            sx={{ flex: "1 1 auto" }}
           />
           <TextInput
             name="lastName"
             label="Last name"
-            containerSx={{
+            sx={{
               marginTop: { sm: 1, md: 0 },
               marginLeft: { sm: 0, md: 1 },
               flex: "1 1 auto",
@@ -59,13 +51,9 @@ export default function CreateGroupForm() {
         <TextInput
           name="phoneNumber"
           label="Phone number"
-          containerSx={{ marginBottom: 1 }}
+          sx={{ marginBottom: 2 }}
         />
-        <TextInput
-          name="address"
-          label="Address"
-          containerSx={{ marginBottom: 1 }}
-        />
+        <TextInput name="address" label="Address" sx={{ marginBottom: 2 }} />
       </FormWizardStep>
       <FormWizardStep stepIndex={3}>
         <FarmerSelect name="farmers" label="Select farmers" />

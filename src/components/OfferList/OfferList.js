@@ -7,6 +7,7 @@ import {
   Chip,
   IconButton,
   Typography,
+  Link,
 } from "@mui/joy";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 import { Link as RouterLink } from "react-router-dom";
@@ -19,6 +20,7 @@ import Empty from "../common/utils/Empty";
 import { useState } from "react";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import PaginatedGridList from "../common/layouts/PaginatedGridList";
+import toTitleCase from "../../utils/toTitleCase";
 
 function OfferItem({
   offer: { product, esco, farmer, isAccepted, expiryDate },
@@ -39,39 +41,68 @@ function OfferItem({
       : "Unknown";
   };
   return (
-    <Card size="sm">
-      <Card size="sm">
+    <Card size="sm" variant="soft" sx={{ borderRadius: "lg" }}>
+      <Card size="sm" variant="soft" sx={{ padding: 0 }}>
         <CardContent orientation="horizontal">
-          <Avatar size="sm" src={resolvePhotoSrc(esco.profilePhoto)}></Avatar>
-          <Typography level="body-sm" sx={{ alignSelf: "center" }}>
-            {esco.name}
-          </Typography>
-          <IconButton
-            sx={{ marginLeft: "auto" }}
+          <Box>
+            <Avatar
+              src={resolvePhotoSrc(esco.profilePhoto)}
+              sx={{ marginRight: 1, flexGrow: 1 }}
+            >
+              {esco.name}
+            </Avatar>
+          </Box>
+          <Link
             component={RouterLink}
             to={`/escos/${esco.id}`}
+            overlay
+            underline="none"
+            color="neutral"
+            sx={{
+              display: "block",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              fontWeight: "bold",
+              alignSelf: "center",
+              marginRight: "auto",
+              maxWidth: 1,
+            }}
+            level="body-sm"
           >
-            <ChevronRightOutlinedIcon />
-          </IconButton>
+            {toTitleCase(esco.name)}
+          </Link>
         </CardContent>
       </Card>
       <AspectRatio>
         <img src={resolvePhotoSrc(product.coverPhoto)} alt={product.name} />
       </AspectRatio>
+      <Box sx={{ position: "relative" }}>
+        <Chip
+          variant="soft"
+          color="warning"
+          size="sm"
+          sx={{
+            transform: "translateY(-65%)",
+            position: "absolute",
+          }}
+        >
+          {getOfferStatus()}
+        </Chip>
+      </Box>
       <Typography
         component={RouterLink}
         to={`/products/${product.id}`}
-        sx={{ textDecoration: "none" }}
+        sx={{ textDecoration: "none", fontSize: "sm", marginTop: 1 }}
       >
-        {product.name}
+        {toTitleCase(product.name)}
       </Typography>
       <Card size="sm">
         <CardContent orientation="horizontal">
           <Avatar size="sm" src={resolvePhotoSrc(farmer.profilePhoto)}></Avatar>
-          <Typography
-            level="body-sm"
-            sx={{ alignSelf: "center" }}
-          >{`${farmer.firstName} ${farmer.lastName}`}</Typography>
+          <Typography level="body-sm" sx={{ alignSelf: "center" }}>
+            {toTitleCase(`${farmer.firstName} ${farmer.lastName}`)}
+          </Typography>
           <IconButton
             sx={{ marginLeft: "auto" }}
             component={RouterLink}
@@ -81,11 +112,6 @@ function OfferItem({
           </IconButton>
         </CardContent>
       </Card>
-      <Box sx={{ display: "flex" }}>
-        <Chip color="warning" sx={{ marginLeft: "auto" }}>
-          {getOfferStatus()}
-        </Chip>
-      </Box>
     </Card>
   );
 }

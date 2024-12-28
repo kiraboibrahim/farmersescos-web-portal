@@ -32,7 +32,7 @@ import toTitleCase from "../../utils/toTitleCase";
 
 export function ProductItem({ product }) {
   return (
-    <Card size="sm">
+    <Card size="sm" variant="soft" sx={{ borderRadius: "lg" }}>
       <CardContent orientation="horizontal">
         <Avatar
           src={resolvePhotoSrc(product.esco.profilePhoto)}
@@ -79,7 +79,11 @@ export function ProductItem({ product }) {
         </Box>
       </CardContent>
       <AspectRatio>
-        <img src={resolvePhotoSrc(product.coverPhoto)} alt={product.name} />
+        <img
+          src={resolvePhotoSrc(product.coverPhoto)}
+          alt={product.name}
+          loading="lazy"
+        />
       </AspectRatio>
       <Link
         sx={{

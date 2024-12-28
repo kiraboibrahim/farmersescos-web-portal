@@ -30,7 +30,8 @@ function FarmerItem({ farmer }) {
   return (
     <Card
       size="sm"
-      variant={isDeletingFarmer ? "soft" : "outlined"}
+      variant="soft"
+      sx={{ borderRadius: "lg" }}
       color={isDeletingFarmer ? "danger" : "neutral"}
     >
       <CardContent orientation="horizontal">
@@ -81,7 +82,11 @@ function FarmerItem({ farmer }) {
         </Box>
       </CardContent>
       <AspectRatio>
-        <img src={resolvePhotoSrc(farmer.coverPhoto)} alt={farmer.name} />
+        <img
+          src={resolvePhotoSrc(farmer.coverPhoto)}
+          alt={farmer.name}
+          loading="lazy"
+        />
       </AspectRatio>
       <Typography
         sx={{

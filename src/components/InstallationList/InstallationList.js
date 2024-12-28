@@ -7,6 +7,9 @@ import {
   Link,
   Stack,
   Typography,
+  Box,
+  Chip,
+  Sheet,
 } from "@mui/joy";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import AgricultureOutlinedIcon from "@mui/icons-material/AgricultureOutlined";
@@ -14,7 +17,6 @@ import { useState } from "react";
 import Loading from "../common/utils/Loading";
 import { useGetFarmerInstallationsQuery } from "../../services/farmer";
 import { useGetEscoInstallationsQuery } from "../../services/esco";
-
 import StarRating from "../common/utils/StarRating";
 import Error from "../common/utils/Error";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
@@ -23,7 +25,7 @@ import PaginatedGridList from "../common/layouts/PaginatedGridList";
 
 function InstallationItem({ installation }) {
   return (
-    <Card size="sm">
+    <Card size="sm" variant="soft" sx={{ borderRadius: "lg" }}>
       <CardContent orientation="horizontal">
         <Avatar
           src={resolvePhotoSrc(installation.esco.profilePhoto)}
@@ -52,6 +54,8 @@ function InstallationItem({ installation }) {
           alt={installation.name}
         />
       </AspectRatio>
+      <StarRating value={3} />
+
       <Stack direction="row">
         <IconButton>
           <AgricultureOutlinedIcon />
@@ -74,9 +78,8 @@ function InstallationItem({ installation }) {
         overlay
         underline="none"
       >
-        <Typography level="body-lg">{installation.product.name}</Typography>
+        <Typography level="body-md">{installation.product.name}</Typography>
       </Link>
-      <StarRating value={3} />
     </Card>
   );
 }

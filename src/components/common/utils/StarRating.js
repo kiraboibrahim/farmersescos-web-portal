@@ -1,9 +1,9 @@
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { Stack } from "@mui/joy";
 
-export default function StarRating({ value }) {
+export default function StarRating({ value, sx = [], ...props }) {
   return (
-    <Stack direction="row">
+    <Stack direction="row" sx={Array.isArray(sx) ? sx : [sx]} {...props}>
       {Array.from({ length: 5 }).map((_, index) => {
         return (
           <StarBorderIcon

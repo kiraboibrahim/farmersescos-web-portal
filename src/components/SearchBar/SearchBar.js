@@ -24,6 +24,7 @@ import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import Loading from "../common/utils/Loading";
 import toTitleCase from "../../utils/toTitleCase";
 import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
+import isEmpty from "../../utils/isEmpty";
 
 const Popup = styled(Popper)({
   zIndex: 1000,
@@ -173,6 +174,13 @@ export default function SearchBar({ containersx = {}, ...props }) {
     setIsOpen(target.value.trim() !== "");
   }
 
+  function handleFocus({ target }) {
+    if (!isEmpty(target.value.trim())) {
+      setSearchQuery(target.value);
+      setIsOpen(true);
+    }
+  }
+
   function handleResultsPopupClose() {
     setIsOpen(false);
   }
@@ -206,7 +214,7 @@ export default function SearchBar({ containersx = {}, ...props }) {
         <Input
           ref={inputRef}
           onChange={handleChange}
-          onFocus={({ target }) => setIsOpen(target.value.trim() !== "")}
+          onFocus={handleFocus}
           placeholder="Search farmers, escos, products"
           value={unDebouncedSearchQuery}
           endDecorator={

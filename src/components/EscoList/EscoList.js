@@ -31,7 +31,8 @@ function EscoItem({ esco }) {
   return (
     <Card
       size="sm"
-      variant={isDeletingEsco ? "soft" : "outlined"}
+      variant="soft"
+      sx={{ borderRadius: "lg" }}
       color={isDeletingEsco ? "danger" : "neutral"}
     >
       <CardContent orientation="horizontal">
@@ -80,7 +81,11 @@ function EscoItem({ esco }) {
         </Dropdown>
       </CardContent>
       <AspectRatio>
-        <img src={resolvePhotoSrc(esco.coverPhoto)} alt={esco.name} />
+        <img
+          src={resolvePhotoSrc(esco.coverPhoto)}
+          alt={esco.name}
+          loading="lazy"
+        />
       </AspectRatio>
     </Card>
   );

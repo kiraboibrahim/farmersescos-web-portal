@@ -77,6 +77,7 @@ export default function EscoProfile() {
                 position: "absolute",
                 left: 10,
                 bottom: -20,
+                boxShadow: "md",
               }}
             ></Avatar>
           </Box>
@@ -176,9 +177,6 @@ export default function EscoProfile() {
               sx={{
                 marginTop: 3,
                 width: "100%",
-                position: "sticky",
-                bottom: 0,
-                zIndex: "fab",
               }}
             >
               <Button

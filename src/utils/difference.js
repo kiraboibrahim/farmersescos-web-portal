@@ -11,12 +11,15 @@ const { isArray } = Array;
  */
 export default function difference(origObj, newObj) {
   function changes(newObj, origObj) {
-    let arrayIndexCounter = 0;
     return transform(newObj, function (result, value, key) {
       if (!isEqual(value, origObj[key])) {
-        let resultKey = isArray(origObj) ? arrayIndexCounter++ : key;
-        result[resultKey] =
-          isObject(value) && isObject(origObj[key])
+        /* For arrays, the whole changed array is taken instead of picking only 
+        the differences between the original array and the changed array */
+        result[key] =
+          isObject(value) &&
+          isObject(origObj[key]) &&
+          !isArray(value) &&
+          !isArray(origObj[key])
             ? changes(value, origObj[key])
             : value;
       }

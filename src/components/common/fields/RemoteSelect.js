@@ -3,9 +3,6 @@ import AsyncSelect from "react-select/async";
 import { useField } from "formik";
 import { useTheme } from "@mui/joy/styles";
 
-const SELECT_OPTION_ACTION = "select-option";
-const REMOVE_OPTION_ACTION = "remove-value";
-
 export default function RemoteSelect({
   name,
   label,
@@ -15,51 +12,19 @@ export default function RemoteSelect({
   getOptionValue,
   isMulti,
   placeholder,
-  containerSx,
+  sx,
   ...props
 }) {
   const theme = useTheme();
   const [
     ,
     { value: selectedOptions, touched, error },
-    { setValue, setError, setTouched },
+    { setValue, setTouched },
   ] = useField({ name, ...props });
 
   const hasError = touched && !!error;
-  function handleAction(action, option) {
-    setTouched(true);
-    switch (action) {
-      case SELECT_OPTION_ACTION:
-        return addOption(option);
-      case REMOVE_OPTION_ACTION:
-        return removeOption(option);
-      default:
-        return setError("Unknown action performed");
-    }
-  }
-
-  function removeOption(option) {
-    setValue(
-      selectedOptions.filter(
-        (selectedOption) =>
-          getOptionValue(selectedOption) !== getOptionValue(option)
-      )
-    );
-  }
-  function addOption(option) {
-    // Before adding an option, filter to remove any duplicates of the option that might be selected
-    setValue(
-      selectedOptions
-        .filter(
-          (selectedOption) =>
-            getOptionValue(selectedOption) !== getOptionValue(option)
-        )
-        .concat([option])
-    );
-  }
-
   return (
-    <FormControl sx={containerSx} error={hasError}>
+    <FormControl sx={Array.isArray(sx) ? sx : [sx]} error={hasError}>
       <FormLabel>{label}</FormLabel>
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         <AsyncSelect
@@ -70,9 +35,9 @@ export default function RemoteSelect({
           getOptionLabel={getOptionLabel}
           getOptionValue={getOptionValue}
           isClearable={false}
-          onChange={(newValue, actionType) => {
-            const { action, option, removedValue } = actionType;
-            return handleAction(action, option || removedValue);
+          onChange={(value) => {
+            setTouched(true);
+            setValue(value);
           }}
           placeholder={placeholder}
           /* Hide the multi value container in order to use the select just like a search field */
