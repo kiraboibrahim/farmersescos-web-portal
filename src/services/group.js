@@ -61,6 +61,40 @@ export const groupApi = createApi({
       invalidatesTags: [GROUP_TAG_TYPE],
       transformErrorResponse: (response, meta, arg) => response.data,
     }),
+    updateGroup: builder.mutation({
+      query: ({ groupId, ...body }) => ({
+        url: `${groupId}`,
+        method: "PATCH",
+        body,
+        headers: {
+          Authorization: `Bearer ${getAuth().token}`,
+        },
+      }),
+      invalidatesTags: (result, error, { groupId }) => [
+        {
+          type: GROUP_TAG_TYPE,
+          id: groupId,
+        },
+      ],
+      transformErrorResponse: (response, meta, arg) => response.data,
+    }),
+    createGroupMembers: builder.mutation({
+      query: ({ groupId, ...body }) => ({
+        url: `${groupId}/members`,
+        method: "POST",
+        body,
+        headers: {
+          Authorization: `Bearer ${getAuth().token}`,
+        },
+      }),
+      invalidatesTags: (result, error, { groupId }) => [
+        {
+          type: GROUP_TAG_TYPE,
+          id: groupId,
+        },
+      ],
+      transformErrorResponse: (response, meta, arg) => response.data,
+    }),
   }),
 });
 
@@ -70,4 +104,6 @@ export const {
   useGetGroupQuery,
   useDeleteGroupMutation,
   useCreateGroupMutation,
+  useUpdateGroupMutation,
+  useCreateGroupMembersMutation,
 } = groupApi;

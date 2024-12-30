@@ -83,6 +83,7 @@ export default function ToolBar({ sx = [] }) {
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           <AddIcon
+            size="lg"
             sx={{
               transition: "transform, 0.3s",
               transform: isCollapsed ? "rotate(45deg)" : "rotate(0deg)",

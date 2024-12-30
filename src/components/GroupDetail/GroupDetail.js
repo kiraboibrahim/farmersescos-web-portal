@@ -8,17 +8,17 @@ import {
   Typography,
 } from "@mui/joy";
 import { NavLink as RouterLink, Outlet, useParams } from "react-router-dom";
-import { useGetFarmerQuery } from "../../services/farmer";
 import Loading from "../common/utils/Loading";
 import Error from "../common/utils/Error";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import toTitleCase from "../../utils/toTitleCase";
+import { useGetGroupQuery } from "../../services/group";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 
-export default function FarmerDetail() {
-  const { id: farmerId } = useParams();
-  const { data: farmer, error, isFetching } = useGetFarmerQuery(farmerId);
+export default function GroupDetail() {
+  const { id: groupId } = useParams();
+  const { data: group, error, isFetching } = useGetGroupQuery(groupId);
   if (!!error) {
     return <Error error={error} />;
   }
@@ -26,7 +26,7 @@ export default function FarmerDetail() {
     return <Loading />;
   }
 
-  if (!!farmer) {
+  if (!!group) {
     return (
       <>
         <Card
@@ -34,26 +34,11 @@ export default function FarmerDetail() {
           sx={{ marginBottom: 5, overflow: "hidden" }}
         >
           <CardContent orientation="horizontal">
-            <Avatar size="lg" src={resolvePhotoSrc(farmer.profilePhoto)}>
-              {farmer.lastName}
+            <Avatar size="lg" src={resolvePhotoSrc(group.profilePhoto)}>
+              {toTitleCase(group.name)}
             </Avatar>
             <Box>
-              <Typography level="h3">
-                {toTitleCase(`${farmer.firstName} ${farmer.lastName}`)}
-              </Typography>
-
-              <Box level="body-xs" sx={{ marginTop: 1 }}>
-                {farmer.cropsGrown.split(",").map((crop, index) => (
-                  <Chip
-                    size="sm"
-                    key={index}
-                    color="success"
-                    sx={{ marginRight: 1, overflow: "scroll" }}
-                  >
-                    {crop}
-                  </Chip>
-                ))}
-              </Box>
+              <Typography level="h3">{toTitleCase(group.name)}</Typography>
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={1}
@@ -63,13 +48,13 @@ export default function FarmerDetail() {
                   level="body-xs"
                   startDecorator={<LocationOnOutlinedIcon />}
                 >
-                  {farmer.address}
+                  {group.address}
                 </Typography>
                 <Typography
                   level="body-xs"
                   startDecorator={<PhoneAndroidOutlinedIcon />}
                 >
-                  {farmer.phoneNumber}
+                  {group.phoneNumber}
                 </Typography>
               </Stack>
             </Box>
@@ -91,7 +76,7 @@ export default function FarmerDetail() {
         >
           <Chip
             component={RouterLink}
-            to={`/farmers/${farmer.id}/profile`}
+            to={`/groups/${group.id}/profile`}
             sx={{ marginRight: 5 }}
             size="md"
           >
@@ -99,7 +84,7 @@ export default function FarmerDetail() {
           </Chip>
           <Chip
             component={RouterLink}
-            to={`/farmers/${farmer.id}/interests`}
+            to={`/groups/${group.id}/interests`}
             sx={{ marginRight: 5 }}
             size="md"
           >
@@ -107,7 +92,7 @@ export default function FarmerDetail() {
           </Chip>
           <Chip
             component={RouterLink}
-            to={`/farmers/${farmer.id}/offers`}
+            to={`/groups/${group.id}/offers`}
             sx={{ marginRight: 5 }}
             size="md"
           >
@@ -115,7 +100,7 @@ export default function FarmerDetail() {
           </Chip>
           <Chip
             component={RouterLink}
-            to={`/farmers/${farmer.id}/installations`}
+            to={`/groups/${group.id}/installations`}
             sx={{ marginRight: 5 }}
             size="md"
           >
@@ -123,7 +108,7 @@ export default function FarmerDetail() {
           </Chip>
           <Chip
             component={RouterLink}
-            to={`/farmers/${farmer.id}/recommendations`}
+            to={`/groups/${group.id}/recommendations`}
             size="md"
           >
             Recommendations

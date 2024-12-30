@@ -24,6 +24,8 @@ import useDeleteProduct from "../../hooks/useDeleteProduct";
 import ProductForm from "./ProductForm";
 import PromoteProductModal from "./PromoteProductModal";
 import useModal from "../../hooks/useModal";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import LearningItemsList from "../common/LearningMaterialList/LearningMaterialList";
 
 export default function ProductDetail() {
   const { id: productId } = useParams();
@@ -119,11 +121,13 @@ export default function ProductDetail() {
             >
               Promote
             </Button>
+            <Button startDecorator={<SchoolOutlinedIcon />}>Upload</Button>
           </ButtonGroup>
 
           <Typography level="h4" sx={{ marginTop: 3 }}>
             {toTitleCase(product.name)}
           </Typography>
+
           <Typography sx={{ marginTop: 2 }} level="body-md">
             Sold by
           </Typography>
@@ -145,6 +149,10 @@ export default function ProductDetail() {
               </IconButton>
             </CardContent>
           </Card>
+          <Typography level="body-md" sx={{ marginTop: 3, marginBottom: 1 }}>
+            Learning Materials
+          </Typography>
+          <LearningItemsList productId={productId} />
           <ProductForm product={product} />
         </Box>
         <PromoteProductModal

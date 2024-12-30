@@ -7,9 +7,6 @@ import {
   Link,
   Stack,
   Typography,
-  Box,
-  Chip,
-  Sheet,
 } from "@mui/joy";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import AgricultureOutlinedIcon from "@mui/icons-material/AgricultureOutlined";
@@ -22,6 +19,7 @@ import Error from "../common/utils/Error";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import Empty from "../common/utils/Empty";
 import PaginatedGridList from "../common/layouts/PaginatedGridList";
+import getFarmerFullName from "../../utils/getFarmerFullName";
 
 function InstallationItem({ installation }) {
   return (
@@ -62,7 +60,7 @@ function InstallationItem({ installation }) {
         </IconButton>
         <Typography level="body-sm" sx={{ alignSelf: "center" }}>
           {!!installation?.farmer
-            ? `${installation.farmer.firstName} ${installation.farmer.lastName}`
+            ? getFarmerFullName(installation.farmer)
             : "N/A"}
         </Typography>
       </Stack>

@@ -16,8 +16,9 @@ export default function LocalSelect({
   multiple,
   ...props
 }) {
-  const [field, { value: selectedOptions, touched, error }, { setValue }] =
-    useField({ name, ...props });
+  const [, { value: selectedOptions, touched, error }, { setValue }] = useField(
+    { name, ...props }
+  );
 
   const hasError = touched && !!error;
 
@@ -32,14 +33,14 @@ export default function LocalSelect({
       <Select
         name={name}
         multiple={!!multiple}
-        options={options}
         defaultValue={defaultValue}
         onChange={(event, option) => selectOption(option)}
         {...props}
-        {...field}
       >
-        {options.map((option) => (
-          <Option value={option}>{option}</Option>
+        {options.map((option, index) => (
+          <Option value={option} key={index}>
+            {option}
+          </Option>
         ))}
       </Select>
       <FormHelperText sx={{ fontSize: "sm" }}>

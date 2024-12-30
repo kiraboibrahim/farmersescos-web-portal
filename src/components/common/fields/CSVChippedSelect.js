@@ -71,8 +71,8 @@ export default function CSVChippedSelect({
   return (
     <FormControl sx={Array.isArray(sx) ? sx : [sx]} error={hasError}>
       <FormLabel>{label}</FormLabel>
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        <Box sx={{ marginBottom: 1 }}>
+      <Box sx={{ marginTop: 1 }}>
+        <Box sx={{ diplay: "flex", flexWrap: "wrap" }}>
           {getOptions().map((option, index) => {
             const _isOptionSelected = isOptionSelected(option);
             return _isOptionSelected ? (
@@ -80,7 +80,7 @@ export default function CSVChippedSelect({
                 key={index}
                 color="success"
                 size="sm"
-                sx={{ marginRight: 2 }}
+                sx={{ marginRight: 2, marginBottom: 1 }}
                 endDecorator={
                   <ChipDelete onClick={() => unSelectOption(option)} />
                 }
@@ -92,7 +92,7 @@ export default function CSVChippedSelect({
                 key={index}
                 color="secondary"
                 size="sm"
-                sx={{ marginRight: 2 }}
+                sx={{ marginRight: 2, marginBottom: 1 }}
                 onClick={() => selectOption(option)}
               >
                 {option}

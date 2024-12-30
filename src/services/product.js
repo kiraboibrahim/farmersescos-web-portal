@@ -30,6 +30,15 @@ export const productApi = createApi({
         },
       ],
     }),
+    getProductLearningMaterial: builder.query({
+      query: (productId) => `${productId}/learning-materials`,
+      providesTags: (result, error, productId) => [
+        {
+          type: PRODUCT_TAG_TYPE,
+          id: productId,
+        },
+      ],
+    }),
     promoteProduct: builder.mutation({
       query: ({ productId, ...body }) => ({
         url: `${productId}/promotions`,
@@ -84,6 +93,7 @@ export const productApi = createApi({
 
 export const {
   useGetProductsQuery,
+  useGetProductLearningMaterialQuery,
   useLazyGetProductsQuery,
   useGetProductQuery,
   useUpdateProductMutation,

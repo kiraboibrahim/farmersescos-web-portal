@@ -21,6 +21,7 @@ import { useState } from "react";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
 import PaginatedGridList from "../common/layouts/PaginatedGridList";
 import toTitleCase from "../../utils/toTitleCase";
+import getFarmerFullName from "../../utils/getFarmerFullName";
 
 function OfferItem({
   offer: { product, esco, farmer, isAccepted, expiryDate },
@@ -101,7 +102,7 @@ function OfferItem({
         <CardContent orientation="horizontal">
           <Avatar size="sm" src={resolvePhotoSrc(farmer.profilePhoto)}></Avatar>
           <Typography level="body-sm" sx={{ alignSelf: "center" }}>
-            {toTitleCase(`${farmer.firstName} ${farmer.lastName}`)}
+            {toTitleCase(getFarmerFullName(farmer))}
           </Typography>
           <IconButton
             sx={{ marginLeft: "auto" }}

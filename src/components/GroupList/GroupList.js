@@ -1,51 +1,51 @@
 import {
-  AspectRatio,
-  Avatar,
-  Box,
   Card,
+  Box,
   CardContent,
-  Dropdown,
-  IconButton,
   Link,
+  Avatar,
   Menu,
-  MenuButton,
+  Dropdown,
   MenuItem,
+  MenuButton,
   Typography,
+  IconButton,
+  AspectRatio,
 } from "@mui/joy";
-import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { useGetEscosQuery } from "../../services/esco";
-import { useState } from "react";
-import Loading from "../common/utils/Loading";
-import Error from "../common/utils/Error";
+import { Link as RouterLink, useSearchParams } from "react-router-dom";
 import resolvePhotoSrc from "../../utils/resolve-photo-src";
-import Empty from "../common/utils/Empty";
-import useDeleteEsco from "../../hooks/useDeleteEsco";
 import toTitleCase from "../../utils/toTitleCase";
+import useDeleteGroup from "../../hooks/useDeleteGroup";
+import { useGetGroupsQuery } from "../../services/group";
+import Empty from "../common/utils/Empty";
+import Error from "../common/utils/Error";
 import PaginatedGridList from "../common/layouts/PaginatedGridList";
+import Loading from "../common/utils/Loading";
+import { useState } from "react";
 
-function EscoItem({ esco }) {
-  const [deleteEsco, isDeletingEsco] = useDeleteEsco();
+function GroupItem({ group }) {
+  const [deleteGroup, isDeletingGroup] = useDeleteGroup();
   return (
     <Card
       size="sm"
       variant="soft"
       sx={{ borderRadius: "lg" }}
-      color={isDeletingEsco ? "danger" : "neutral"}
+      color={isDeletingGroup ? "danger" : "neutral"}
     >
       <CardContent orientation="horizontal">
         <Box>
           <Avatar
-            src={resolvePhotoSrc(esco.profilePhoto)}
+            src={resolvePhotoSrc(group.profilePhoto)}
             sx={{ marginRight: 0.5 }}
           >
-            {esco.name}
+            {group.name}
           </Avatar>
         </Box>
         <Link
           component={RouterLink}
-          to={`/escos/${esco.id}`}
+          to={`/groups/${group.id}`}
           overlay
           underline="none"
           color="neutral"
@@ -61,7 +61,7 @@ function EscoItem({ esco }) {
           }}
           level="body-md"
         >
-          {toTitleCase(esco.name)}
+          {toTitleCase(group.name)}
           <Typography
             level="body-xs"
             sx={{
@@ -71,7 +71,7 @@ function EscoItem({ esco }) {
               whiteSpace: "nowrap",
             }}
           >
-            {esco.address}
+            {group.address}
           </Typography>
         </Link>
         <Dropdown>
@@ -79,7 +79,7 @@ function EscoItem({ esco }) {
             <MoreVertIcon />
           </MenuButton>
           <Menu>
-            <MenuItem onClick={async () => await deleteEsco(esco.id)}>
+            <MenuItem onClick={async () => await deleteGroup(group.id)}>
               <Typography
                 level="body-sm"
                 startDecorator={<DeleteOutlinedIcon />}
@@ -92,8 +92,8 @@ function EscoItem({ esco }) {
       </CardContent>
       <AspectRatio>
         <img
-          src={resolvePhotoSrc(esco.coverPhoto)}
-          alt={esco.name}
+          src={resolvePhotoSrc(group.coverPhoto)}
+          alt={group.name}
           loading="lazy"
         />
       </AspectRatio>
@@ -101,28 +101,26 @@ function EscoItem({ esco }) {
   );
 }
 
-export default function EscoList() {
+export default function GroupList() {
   const [searchParams] = useSearchParams();
   const [page, setPage] = useState(1);
   const {
-    data: escos,
+    data: groups,
     error: fetchError,
     isFetching,
-  } = useGetEscosQuery({ page, search: searchParams.get("search") });
+  } = useGetGroupsQuery({ page, search: searchParams.get("search") });
 
   if (isFetching) {
     return <Loading />;
   }
-
-  if (fetchError) {
+  if (!!fetchError) {
     return <Error error={fetchError} />;
   }
-
   return (
     <PaginatedGridList
-      data={escos}
-      renderItem={(item) => <EscoItem esco={item} />}
-      renderEmpty={() => <Empty>No escos found</Empty>}
+      data={groups}
+      renderItem={(item) => <GroupItem group={item} />}
+      renderEmpty={() => <Empty>No groups found</Empty>}
       onSelectPage={setPage}
     />
   );

@@ -3,6 +3,7 @@ import { lazily } from "react-lazily";
 import FarmerList from "../components/FarmerList/FarmerList";
 import { AllProductList } from "../components/ProductList/Product.List";
 import EscoList from "../components/EscoList/EscoList";
+import GroupList from "../components/GroupList/GroupList";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Main from "../components/Main/Main";
 import Login from "../components/Login/Login";
@@ -12,8 +13,10 @@ import {
   FarmerOfferList,
 } from "../components/OfferList/OfferList";
 import { FarmerRecommendationList } from "../components/FarmerRecommendationList/FarmerRecommendationList";
+import GroupProfile from "../components/GroupProfile/GroupProfile";
 import { Suspense } from "react";
 import Loading from "../components/common/utils/Loading";
+import GroupDetail from "../components/GroupDetail/GroupDetail";
 const FarmerDetail = lazy(() =>
   import("../components/FarmerDetail/FarmerDetail")
 );
@@ -120,6 +123,24 @@ const routes = [
           {
             path: "offers",
             element: <EscoOfferList />,
+          },
+        ],
+      },
+      {
+        path: "groups",
+        element: <GroupList />,
+      },
+      {
+        path: "/groups/:id",
+        element: <GroupDetail />,
+        children: [
+          {
+            element: <GroupProfile />,
+            index: true,
+          },
+          {
+            path: "profile",
+            element: <GroupProfile />,
           },
         ],
       },
